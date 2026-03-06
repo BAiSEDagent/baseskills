@@ -19,6 +19,10 @@ Implements shipbook gates with output buckets:
 - FEATURE RISK
 - GROWTH GAP
 
+## Critical learned step (Base Builder)
+- Always call `sdk.actions.ready()` from `@farcaster/miniapp-sdk` on app mount.
+- Without this, Builder shows `Ready call: Not Ready` even if manifest is valid.
+
 ## Ruleset
 - `rules/base-v2026-03-05.json`
 - `ship-report` prints rule IDs for traceability.
