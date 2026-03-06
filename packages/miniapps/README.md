@@ -19,9 +19,11 @@ Implements shipbook gates with output buckets:
 - FEATURE RISK
 - GROWTH GAP
 
-## Critical learned step (Base Builder)
+## Critical learned steps
 - Always call `sdk.actions.ready()` from `@farcaster/miniapp-sdk` on app mount.
 - Without this, Builder shows `Ready call: Not Ready` even if manifest is valid.
+- Before submission, explicitly confirm contract deployment status (Sepolia test vs Base mainnet live).
+- Never claim "live" onchain unless Base mainnet contract address + tx are verified.
 
 ## Ruleset
 - `rules/base-v2026-03-05.json`

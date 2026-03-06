@@ -68,6 +68,8 @@ If you know nothing about Base, BaseSkills gets you to a launch-ready app with c
 - no "done" without tests + security checks + deploy verification
 - no silent pass states: every failure includes exact fix instructions
 - production URL checks are mandatory
+- deployment truth labeling is mandatory: explicitly state `Sepolia-tested` vs `Base mainnet live`
+- never claim mainnet live without verified mainnet contract address + transaction evidence
 
 ---
 
