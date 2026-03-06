@@ -1,0 +1,7 @@
+{
+  "name": "@baised/baseskills-miniapps",
+  "version": "0.1.0",
+  "type": "module",
+  "private": false,
+  "main": "index.js"
+}
