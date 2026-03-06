@@ -1,0 +1,31 @@
+name: miniapps-gate
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  gate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Run miniapps tests
+        run: |
+          cd packages/miniapps
+          npm test
+
+      - name: Preflight local golden manifest
+        run: |
+          cd packages/miniapps/examples/golden
+          node ../../src/cli.js preflight --manifest public/.well-known/farcaster.json
+
+      - name: Optional live verify
+        if: ${{ vars.MINIAPP_PREVIEW_URL != '' }}
+        run: |
+          cd packages/miniapps
+          node src/cli.js ship-report --url "${{ vars.MINIAPP_PREVIEW_URL }}"
