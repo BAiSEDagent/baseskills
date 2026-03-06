@@ -17,3 +17,6 @@ Base-native skill system inspired by ETHSkills, focused on executable workflows.
 1. Import miniapp shipbook rules from `base-miniapp-pipeline`
 2. Add machine-checkable Base docs ruleset
 3. Publish first installable skill bundle
+
+## Masterplan
+- `docs/V1_MASTERPLAN.md`
