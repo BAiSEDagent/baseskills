@@ -9,8 +9,9 @@ baseskills-miniapps create-base-miniapp <name>
 baseskills-miniapps preflight
 baseskills-miniapps verify --url https://your-app.vercel.app
 baseskills-miniapps can-submit --url https://your-app.vercel.app
-baseskills-miniapps ship-report --url https://your-app.vercel.app
+baseskills-miniapps ship-report --url https://your-app.vercel.app [--json]
 baseskills-miniapps shipbook-plan <name>
+baseskills-miniapps autofix [--manifest public/.well-known/farcaster.json]
 ```
 
 Implements shipbook gates with output buckets:
