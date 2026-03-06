@@ -3,6 +3,24 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import { validateManifest, validateLocalAssets } from './validators.js';
 
+const RULES_VERSION = 'base-v2026-03-05';
+const RULES = {
+  R001: { severity: 'submit_blocker', text: 'manifest not reachable (non-200)' },
+  R002: { severity: 'submit_blocker', text: 'manifest invalid JSON' },
+  R003: { severity: 'submit_blocker', text: 'accountAssociation incomplete' },
+  R004: { severity: 'submit_blocker', text: 'required frame fields missing' },
+  R005: { severity: 'submit_blocker', text: 'frame.subtitle must be <= 30 chars' },
+  R006: { severity: 'submit_blocker', text: 'frame.primaryCategory missing' },
+  R007: { severity: 'submit_blocker', text: 'frame.tags missing' },
+  R101: { severity: 'feature_risk', text: 'frame.description missing' },
+  R102: { severity: 'feature_risk', text: 'frame.screenshotUrls missing' },
+  R103: { severity: 'feature_risk', text: 'frame.heroImageUrl missing' },
+  R104: { severity: 'feature_risk', text: 'og fields incomplete' },
+  R105: { severity: 'feature_risk', text: 'frame.webhookUrl missing' },
+  R201: { severity: 'growth_gap', text: 'frame.tagline missing' },
+  R202: { severity: 'growth_gap', text: 'frame.imageUrl missing (embed conversion risk)' }
+};
+
 const args = process.argv.slice(2);
 const cmd = args[0];
 
@@ -34,25 +52,35 @@ function classifyGates(json, status) {
   const featureRisks = [];
   const growthGaps = [];
 
-  if (status !== 200) submitBlockers.push('manifest not reachable (non-200)');
-  if (!json) submitBlockers.push('manifest invalid JSON');
+  const pushRule = (id) => {
+    const r = RULES[id];
+    const item = `[${id}] ${r.text}`;
+    if (r.severity === 'submit_blocker') submitBlockers.push(item);
+    if (r.severity === 'feature_risk') featureRisks.push(item);
+    if (r.severity === 'growth_gap') growthGaps.push(item);
+  };
+
+  if (status !== 200) pushRule('R001');
+  if (!json) pushRule('R002');
   if (!json) return { submitBlockers, featureRisks, growthGaps };
 
   const valid = validateManifest(json);
-  submitBlockers.push(...valid.errors);
+  if (valid.errors.some((e) => e.includes('accountAssociation'))) pushRule('R003');
+  if (valid.errors.some((e) => e.includes('frame.') && e.includes('missing'))) pushRule('R004');
+  if (valid.errors.some((e) => e.includes('subtitle'))) pushRule('R005');
 
   const frame = json.frame ?? {};
-  if (!frame.primaryCategory) submitBlockers.push('frame.primaryCategory missing');
-  if (!Array.isArray(frame.tags) || frame.tags.length === 0) submitBlockers.push('frame.tags missing');
+  if (!frame.primaryCategory) pushRule('R006');
+  if (!Array.isArray(frame.tags) || frame.tags.length === 0) pushRule('R007');
 
-  if (!frame.description) featureRisks.push('frame.description missing');
-  if (!frame.screenshotUrls || frame.screenshotUrls.length === 0) featureRisks.push('frame.screenshotUrls missing');
-  if (!frame.heroImageUrl) featureRisks.push('frame.heroImageUrl missing');
-  if (!frame.ogTitle || !frame.ogDescription || !frame.ogImageUrl) featureRisks.push('og fields incomplete');
-  if (!frame.webhookUrl) featureRisks.push('frame.webhookUrl missing');
+  if (!frame.description) pushRule('R101');
+  if (!frame.screenshotUrls || frame.screenshotUrls.length === 0) pushRule('R102');
+  if (!frame.heroImageUrl) pushRule('R103');
+  if (!frame.ogTitle || !frame.ogDescription || !frame.ogImageUrl) pushRule('R104');
+  if (!frame.webhookUrl) pushRule('R105');
 
-  if (!frame.tagline) growthGaps.push('frame.tagline missing');
-  if (!frame.imageUrl) growthGaps.push('frame.imageUrl missing (embed conversion risk)');
+  if (!frame.tagline) pushRule('R201');
+  if (!frame.imageUrl) pushRule('R202');
 
   return { submitBlockers, featureRisks, growthGaps };
 }
@@ -112,6 +140,7 @@ async function submitReady() {
   const { submitBlockers, featureRisks, growthGaps } = classifyGates(out.json, out.status);
   const pass = submitBlockers.length === 0;
 
+  console.log(`Ruleset: ${RULES_VERSION}`);
   console.log(pass ? 'PASS — YES: submit now' : 'FAIL — NO: fix blockers');
   console.log('\nSUBMIT BLOCKER:');
   if (!submitBlockers.length) console.log('- none');

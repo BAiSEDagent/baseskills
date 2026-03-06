@@ -1,0 +1,29 @@
+{
+  "accountAssociation": {
+    "header": "sample-header",
+    "payload": "sample-payload",
+    "signature": "sample-signature"
+  },
+  "frame": {
+    "version": "1",
+    "name": "GoldenBaseApp",
+    "iconUrl": "https://example.vercel.app/assets/icon-1024.png",
+    "homeUrl": "https://example.vercel.app",
+    "imageUrl": "https://example.vercel.app/assets/cover-1200x630.png",
+    "buttonTitle": "Open",
+    "splashImageUrl": "https://example.vercel.app/assets/icon-1024.png",
+    "splashBackgroundColor": "#0A0A0C",
+    "subtitle": "Predict Base winners.",
+    "description": "Predict Base app momentum and earn rewards.",
+    "primaryCategory": "finance",
+    "tags": ["base", "prediction"],
+    "screenshotUrls": ["https://example.vercel.app/assets/cover-1200x630.png"],
+    "heroImageUrl": "https://example.vercel.app/assets/cover-1200x630.png",
+    "tagline": "Predict Base momentum.",
+    "ogTitle": "GoldenBaseApp",
+    "ogDescription": "Predict Base app momentum.",
+    "ogImageUrl": "https://example.vercel.app/assets/cover-1200x630.png",
+    "webhookUrl": "https://example.vercel.app/api/webhook/notifications",
+    "noindex": true
+  }
+}

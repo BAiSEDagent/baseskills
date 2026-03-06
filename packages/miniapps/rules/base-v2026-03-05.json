@@ -1,0 +1,27 @@
+{
+  "version": "2026-03-05",
+  "source": [
+    "https://docs.base.org/mini-apps/quickstart/migrate-existing-apps",
+    "https://docs.base.org/mini-apps/quickstart/build-checklist",
+    "https://docs.base.org/mini-apps/featured-guidelines/product-guidelines",
+    "https://docs.base.org/mini-apps/featured-guidelines/design-guidelines",
+    "https://docs.base.org/mini-apps/featured-guidelines/notification-guidelines",
+    "https://docs.base.org/mini-apps/featured-guidelines/technical-guidelines"
+  ],
+  "rules": [
+    {"id":"R001","severity":"submit_blocker","check":"manifest_reachable"},
+    {"id":"R002","severity":"submit_blocker","check":"manifest_json_valid"},
+    {"id":"R003","severity":"submit_blocker","check":"account_association_complete"},
+    {"id":"R004","severity":"submit_blocker","check":"frame_required_fields"},
+    {"id":"R005","severity":"submit_blocker","check":"frame_subtitle_max_30"},
+    {"id":"R006","severity":"submit_blocker","check":"primary_category_present"},
+    {"id":"R007","severity":"submit_blocker","check":"tags_present"},
+    {"id":"R101","severity":"feature_risk","check":"description_present"},
+    {"id":"R102","severity":"feature_risk","check":"screenshot_urls_present"},
+    {"id":"R103","severity":"feature_risk","check":"hero_image_present"},
+    {"id":"R104","severity":"feature_risk","check":"og_fields_present"},
+    {"id":"R105","severity":"feature_risk","check":"webhook_url_present"},
+    {"id":"R201","severity":"growth_gap","check":"tagline_present"},
+    {"id":"R202","severity":"growth_gap","check":"image_url_present"}
+  ]
+}

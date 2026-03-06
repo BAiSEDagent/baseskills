@@ -17,3 +17,7 @@ Implements shipbook gates with output buckets:
 - SUBMIT BLOCKER
 - FEATURE RISK
 - GROWTH GAP
+
+## Ruleset
+- `rules/base-v2026-03-05.json`
+- `ship-report` prints rule IDs for traceability.
