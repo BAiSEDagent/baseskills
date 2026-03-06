@@ -20,6 +20,8 @@ const RULES = {
   R103: { severity: 'feature_risk', text: 'frame.heroImageUrl missing' },
   R104: { severity: 'feature_risk', text: 'og fields incomplete' },
   R105: { severity: 'feature_risk', text: 'frame.webhookUrl missing' },
+  R106: { severity: 'feature_risk', text: 'frame.subtitle should not end with punctuation' },
+  R107: { severity: 'feature_risk', text: 'frame.screenshotUrls should include at least 3 images' },
   R201: { severity: 'growth_gap', text: 'frame.tagline missing' },
   R202: { severity: 'growth_gap', text: 'frame.imageUrl missing (embed conversion risk)' }
 };
@@ -95,6 +97,8 @@ function classifyGates(json, status, appUrl, extras = {}) {
 
   if (!frame.description) pushRule('R101');
   if (!frame.screenshotUrls || frame.screenshotUrls.length === 0) pushRule('R102');
+  if (typeof frame.subtitle === 'string' && /[.!?]\s*$/.test(frame.subtitle)) pushRule('R106');
+  if (!Array.isArray(frame.screenshotUrls) || frame.screenshotUrls.length < 3) pushRule('R107');
   if (!frame.heroImageUrl) pushRule('R103');
   if (!frame.ogTitle || !frame.ogDescription || !frame.ogImageUrl) pushRule('R104');
   if (!frame.webhookUrl) pushRule('R105');

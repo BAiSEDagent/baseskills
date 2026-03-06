@@ -24,6 +24,8 @@
     {"id":"R103","severity":"feature_risk","check":"hero_image_present"},
     {"id":"R104","severity":"feature_risk","check":"og_fields_present"},
     {"id":"R105","severity":"feature_risk","check":"webhook_url_present"},
+    {"id":"R106","severity":"feature_risk","check":"subtitle_no_terminal_punctuation"},
+    {"id":"R107","severity":"feature_risk","check":"screenshot_urls_min_3"},
     {"id":"R201","severity":"growth_gap","check":"tagline_present"},
     {"id":"R202","severity":"growth_gap","check":"image_url_present"}
   ]
