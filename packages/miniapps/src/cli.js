@@ -310,6 +310,11 @@ async function shipbookPlan() {
     if (cmd === 'create-base-miniapp') return await scaffold();
     if (cmd === 'shipbook-plan' || cmd === 'bible-plan') return await shipbookPlan();
     if (cmd === 'autofix') return await autoFix();
+    if (cmd === 'env-check') {
+      const { envCheck } = await import('./env-check.js');
+      const network = args[1] || 'mainnet';
+      return await envCheck({ network });
+    }
 
     console.log('Usage:');
     console.log('  baseskills-miniapps create-base-miniapp <name>');
@@ -319,6 +324,7 @@ async function shipbookPlan() {
     console.log('  baseskills-miniapps ship-report --url <https://app.vercel.app> [--json]');
     console.log('  baseskills-miniapps shipbook-plan <name> [--out ./plan.md]');
     console.log('  baseskills-miniapps autofix [--manifest <path>]');
+    console.log('  baseskills-miniapps env-check [mainnet|testnet]');
     process.exit(1);
   } catch (err) {
     console.error(`❌ ${err.message}`);
