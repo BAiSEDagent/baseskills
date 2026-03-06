@@ -1,7 +1,13 @@
 {
   "name": "@baised/baseskills-miniapps",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "type": "module",
   "private": false,
-  "main": "index.js"
+  "main": "index.js",
+  "bin": {
+    "baseskills-miniapps": "src/cli.js"
+  },
+  "scripts": {
+    "test": "node --test"
+  }
 }

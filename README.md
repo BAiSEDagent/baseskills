@@ -11,7 +11,7 @@ Base-native skill system inspired by ETHSkills, focused on executable workflows.
 
 ## Status
 - v0 scaffold initialized
-- `base-miniapp-pipeline` is module #1 for mini app shipping
+- `@baised/baseskills-miniapps` now imports shipbook CLI from `base-miniapp-pipeline` as module #1
 
 ## Next Milestones
 1. Import miniapp shipbook rules from `base-miniapp-pipeline`

@@ -2,12 +2,18 @@
 
 Mini app shipping module for Base.
 
-## Commands (target state)
-- scaffold
-- preflight
-- verify
-- can-submit
-- ship-report
-- shipbook-plan
+## CLI
 
-This module will absorb and extend `base-miniapp-pipeline`.
+```bash
+baseskills-miniapps create-base-miniapp <name>
+baseskills-miniapps preflight
+baseskills-miniapps verify --url https://your-app.vercel.app
+baseskills-miniapps can-submit --url https://your-app.vercel.app
+baseskills-miniapps ship-report --url https://your-app.vercel.app
+baseskills-miniapps shipbook-plan <name>
+```
+
+Implements shipbook gates with output buckets:
+- SUBMIT BLOCKER
+- FEATURE RISK
+- GROWTH GAP
