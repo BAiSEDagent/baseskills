@@ -1,6 +1,14 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { validateManifest } from '../src/validators.js';
+import { validateManifest, validateAssociationForDomain } from '../src/validators.js';
+
+function b64urlJson(obj) {
+  return Buffer.from(JSON.stringify(obj), 'utf8')
+    .toString('base64')
+    .replace(/\+/g, '-')
+    .replace(/\//g, '_')
+    .replace(/=+$/, '');
+}
 
 test('validateManifest flags long subtitle', () => {
   const out = validateManifest({
@@ -22,4 +30,29 @@ test('validateManifest passes minimum valid frame', () => {
     }
   });
   assert.equal(out.ok, true);
+});
+
+test('validateAssociationForDomain passes for matching payload domain', () => {
+  const manifest = {
+    accountAssociation: {
+      header: b64urlJson({ key: '0xabc', fid: 1, type: 'custody' }),
+      payload: b64urlJson({ domain: 'example.vercel.app' }),
+      signature: 'sig'
+    }
+  };
+  const out = validateAssociationForDomain(manifest, 'https://example.vercel.app');
+  assert.equal(out.ok, true);
+});
+
+test('validateAssociationForDomain fails for domain mismatch', () => {
+  const manifest = {
+    accountAssociation: {
+      header: b64urlJson({ key: '0xabc', fid: 1, type: 'custody' }),
+      payload: b64urlJson({ domain: 'wrong.vercel.app' }),
+      signature: 'sig'
+    }
+  };
+  const out = validateAssociationForDomain(manifest, 'https://example.vercel.app');
+  assert.equal(out.ok, false);
+  assert.ok(out.errors.some((e) => e.includes('domain mismatch')));
 });

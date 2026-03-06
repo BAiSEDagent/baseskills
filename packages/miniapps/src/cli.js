@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 import fs from 'node:fs/promises';
 import path from 'node:path';
-import { validateManifest, validateLocalAssets } from './validators.js';
+import { validateManifest, validateLocalAssets, validateAssociationForDomain } from './validators.js';
 
 const RULES_VERSION = 'base-v2026-03-05';
 const RULES = {
@@ -12,6 +12,7 @@ const RULES = {
   R005: { severity: 'submit_blocker', text: 'frame.subtitle must be <= 30 chars' },
   R006: { severity: 'submit_blocker', text: 'frame.primaryCategory missing' },
   R007: { severity: 'submit_blocker', text: 'frame.tags missing' },
+  R008: { severity: 'submit_blocker', text: 'accountAssociation domain/key validation failed' },
   R101: { severity: 'feature_risk', text: 'frame.description missing' },
   R102: { severity: 'feature_risk', text: 'frame.screenshotUrls missing' },
   R103: { severity: 'feature_risk', text: 'frame.heroImageUrl missing' },
@@ -47,7 +48,7 @@ async function fetchJson(url) {
   return { status: res.status, ok: res.ok, json, text };
 }
 
-function classifyGates(json, status) {
+function classifyGates(json, status, appUrl) {
   const submitBlockers = [];
   const featureRisks = [];
   const growthGaps = [];
@@ -68,6 +69,9 @@ function classifyGates(json, status) {
   if (valid.errors.some((e) => e.includes('accountAssociation'))) pushRule('R003');
   if (valid.errors.some((e) => e.includes('frame.') && e.includes('missing'))) pushRule('R004');
   if (valid.errors.some((e) => e.includes('subtitle'))) pushRule('R005');
+
+  const assocCheck = validateAssociationForDomain(json, appUrl);
+  if (!assocCheck.ok) pushRule('R008');
 
   const frame = json.frame ?? {};
   if (!frame.primaryCategory) pushRule('R006');
@@ -137,7 +141,7 @@ async function submitReady() {
   const manifestUrl = `${url.replace(/\/$/, '')}/.well-known/farcaster.json`;
   const out = await fetchJson(manifestUrl);
 
-  const { submitBlockers, featureRisks, growthGaps } = classifyGates(out.json, out.status);
+  const { submitBlockers, featureRisks, growthGaps } = classifyGates(out.json, out.status, url);
   const pass = submitBlockers.length === 0;
 
   console.log(`Ruleset: ${RULES_VERSION}`);

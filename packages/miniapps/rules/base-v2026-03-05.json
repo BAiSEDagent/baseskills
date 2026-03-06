@@ -16,6 +16,7 @@
     {"id":"R005","severity":"submit_blocker","check":"frame_subtitle_max_30"},
     {"id":"R006","severity":"submit_blocker","check":"primary_category_present"},
     {"id":"R007","severity":"submit_blocker","check":"tags_present"},
+    {"id":"R008","severity":"submit_blocker","check":"account_association_domain_key_valid"},
     {"id":"R101","severity":"feature_risk","check":"description_present"},
     {"id":"R102","severity":"feature_risk","check":"screenshot_urls_present"},
     {"id":"R103","severity":"feature_risk","check":"hero_image_present"},

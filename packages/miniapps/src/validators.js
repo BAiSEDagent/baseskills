@@ -9,6 +9,50 @@ export function isHttpsUrl(value) {
   }
 }
 
+function decodeBase64UrlToJson(input) {
+  try {
+    const normalized = input.replace(/-/g, '+').replace(/_/g, '/');
+    const pad = normalized.length % 4;
+    const padded = normalized + (pad ? '='.repeat(4 - pad) : '');
+    const raw = Buffer.from(padded, 'base64').toString('utf8');
+    return JSON.parse(raw);
+  } catch {
+    return null;
+  }
+}
+
+export function validateAssociationForDomain(manifest, appUrl) {
+  const errors = [];
+  const assoc = manifest?.accountAssociation ?? {};
+  if (!assoc.header || !assoc.payload || !assoc.signature) {
+    errors.push('accountAssociation incomplete');
+    return { ok: false, errors };
+  }
+
+  const header = decodeBase64UrlToJson(assoc.header);
+  const payload = decodeBase64UrlToJson(assoc.payload);
+
+  if (!header) errors.push('accountAssociation.header invalid base64url JSON');
+  if (!payload) errors.push('accountAssociation.payload invalid base64url JSON');
+
+  if (header && (!header.key || !String(header.key).startsWith('0x'))) {
+    errors.push('accountAssociation.header.key missing/invalid');
+  }
+
+  if (payload?.domain && appUrl) {
+    try {
+      const host = new URL(appUrl).host;
+      if (payload.domain !== host) {
+        errors.push(`accountAssociation domain mismatch (payload=${payload.domain}, expected=${host})`);
+      }
+    } catch {
+      errors.push('app URL invalid for domain verification');
+    }
+  }
+
+  return { ok: errors.length === 0, errors };
+}
+
 export function validateManifest(manifest) {
   const errors = [];
   const frame = manifest?.frame ?? {};
