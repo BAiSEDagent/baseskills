@@ -27,6 +27,7 @@
     {"id":"R106","severity":"feature_risk","check":"subtitle_no_terminal_punctuation"},
     {"id":"R107","severity":"feature_risk","check":"screenshot_urls_min_3"},
     {"id":"R201","severity":"growth_gap","check":"tagline_present"},
-    {"id":"R202","severity":"growth_gap","check":"image_url_present"}
+    {"id":"R202","severity":"growth_gap","check":"image_url_present"},
+    {"id":"R203","severity":"submit_blocker","check":"warpcast_developer_registration","description":"App must be registered in Warpcast Developer settings (Settings > Developer > Mini Apps > add domain). Without this step the app is not discoverable in Base App search and the frame wallet connector does not initialize.","howToFix":"Open Warpcast on mobile > Settings > Developer > Mini Apps > enter domain (e.g. baserank-miniapp.vercel.app). Verify manifest is accepted."}
   ]
 }
