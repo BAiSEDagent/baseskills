@@ -77,6 +77,26 @@
 
 ---
 
+---
+
+## B009 — Wrong default chain (first chain in wagmi config is default)
+**Project:** BaseRank (2026-03-06)
+**Symptom:** Wallet connects to Sepolia, USDC balance shows testnet funds, txs routed to wrong network
+**Root cause:** `chains: [baseSepolia, base]` — wagmi defaults to first chain; mainnet must be first
+**Gate:** Always check wagmi `chains` array order before deploy; mainnet must be index 0
+**Rule:** Never add a chain to a wagmi config without reading the full chains array first
+
+---
+
+## B010 — Hex calldata truncated by Discord/chat rendering
+**Project:** BaseRank Safe execution (2026-03-06)
+**Symptom:** Safe tx stored 903 bytes instead of 964; inner call reverted with GS013
+**Root cause:** Copy-pasted calldata via Discord code block; Discord silently truncated the hex string
+**Gate:** Always verify `data.length === expectedBytes` after Safe tx is submitted via API
+**Rule:** Never paste hex calldata through chat; always write to file or submit via API directly
+
+---
+
 ## Pre-Build Checklist (run before writing any contract or deployment script)
 
 - [ ] B001: Is contract address verified on-chain? (`cast code`)
