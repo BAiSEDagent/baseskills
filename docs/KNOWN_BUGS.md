@@ -117,3 +117,12 @@
 - **Slither** — static analysis for Solidity
 - **Foundry fuzz tests** — property-based testing for contract invariants
 - **gitleaks** — secret scanning before every push
+
+---
+
+## B011 — Vercel env var saved with literal quote characters
+**Project:** BaseRank (2026-03-06)
+**Symptom:** `Address "0xC7Db..." is invalid` — viem getAddress() rejects address with embedded quotes
+**Root cause:** Vercel env var value stored as `"0xC7Db..."` with literal quote chars (copy-paste artifact)
+**Gate:** After setting Vercel env vars, verify with `vercel env ls` and redeploy + check runtime value
+**Rule:** Never copy-paste addresses into Vercel env with surrounding quotes; always paste raw value
